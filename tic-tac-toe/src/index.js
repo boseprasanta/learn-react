@@ -2,25 +2,56 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null // react doesn't support setState in here
-    }
-  }
-    render() {
+// class Square extends React.Component {
+//   /*
+//      If a component doesn't need to have a state for itself
+//      counstructor can be removed
+//   */ 
+//   // constructor(props) {
+//   //   super(props);
+//   //   this.state = {
+//   //     value: null // react doesn't support setState in here
+//   //   }
+//   // }
+//     render() {
+//       return (
+//         <button className="square" onClick= {()=>{ this.props.onClick() }}>
+//           {this.props.value}
+//         </button>
+//       );
+//     }
+//   }
+
+  // functional component: Square
+  function Square(props) {
       return (
-        <button className="square" onClick={()=>{ this.setState({ value: "X" }) }}>
-          {this.state.value}
+        <button className="square" onClick= {()=>{ this.props.onClick() }}>
+          {this.props.value}
         </button>
       );
-    }
   }
-  
   class Board extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        // squares: Array(9).fill(null)
+        squares: [
+          "O","X",null,
+          null,"O",null,
+          null,"O","O",
+        ]
+      }
+    }
+
+    handleClick(i) {
+      let temp = this.state.squares
+      temp[i] = "X"
+      this.setState({
+        squares: temp
+      })
+    }
     renderSquare(i) {
-      return <Square value= {i} />;
+      return <Square value= {this.state.squares[i]} onClick = { () => { this.handleClick(i) } } />;
     }
   
     render() {
