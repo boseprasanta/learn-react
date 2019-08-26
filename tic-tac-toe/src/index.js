@@ -37,13 +37,6 @@ import './index.css';
     }
 
     render() {
-      /* 
-        After each change in square. As boards's status will be reset the 
-        board will rerender, so will all the squares
-      */
-    //  const winner = calculateWinner(this.state.squares)
-    //  const status = winner === null ? `Next player: ${this.state.xIsNext === true ? "X":"O"}` : `${winner} is the winner`
-  
       return (
         <div>
           <div className="status">{}</div>
@@ -96,17 +89,38 @@ import './index.css';
         xIsNext: !this.state.xIsNext
       })
     }
+
+    jumpTo = (step) => {
+      const history = this.state.history
+      const current = history.slice(0, step+1)
+      this.setState({
+        history: current,
+        xIsNext: current.length % 2 === 1
+      })
+    }
     render() {
       const history = this.state.history.slice()
-      const block = history[history.length - 1]
+      const current = history[history.length - 1]
+      const winner = calculateWinner(current.squares)
+      const status = winner === null ? `Next player: ${this.state.xIsNext === true ? "X":"O"}` : `${winner} is the winner`
+      const moves = history.map((step, move) => {
+          const desc = move ? // move only as, js considers 0 as false
+            'Go to move #' + move :
+            'Go to game start';
+          return (
+            <li>
+              <button onClick={() => this.jumpTo(move)}>{desc}</button>
+            </li>
+          );
+        });
       return (
         <div className="game">
           <div className="game-board">
-            <Board squares= {block.squares} onClick = {this.handleClick} />
+            <Board squares= {current.squares} onClick = {this.handleClick} />
           </div>
           <div className="game-info">
-            <div>{/* status */}</div>
-            <ol>{/* TODO */}</ol>
+            <div>{status}</div>
+            <ol>{moves}</ol>
           </div>
         </div>
       );
