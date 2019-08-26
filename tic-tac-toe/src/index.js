@@ -109,7 +109,7 @@ import './index.css';
             'Go to game start';
           return (
             <li>
-              <button onClick={() => this.jumpTo(move)}>{desc}</button>
+              <button key={move} onClick={() => this.jumpTo(move)}>{desc}</button>
             </li>
           );
         });
